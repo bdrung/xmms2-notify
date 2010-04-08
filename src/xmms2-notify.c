@@ -26,6 +26,8 @@
 
 #define UNKNOWN "Unknown"
 #define NOTE "\xe2\x99\xab"
+#define PAUSE "\xee\x8c\x9a"
+#define STOP "\xee\x8c\x9b"
 #define USAGE "Notify currently playing song.\n -c: will only notify once and exit,\n default is to run until xmms2 is quit.\n"
 
 typedef struct track_t {
@@ -58,21 +60,20 @@ notify_song()
     if(current.id != 0)
     {
 
-        tmp = g_markup_printf_escaped("<big><b>%s</b></big>\n"
-                    "<small>by</small> %s <small>from</small> %s [%d]",
-                current.title, current.artist,
-                current.album, current.tracknr);
+        tmp = g_markup_printf_escaped("<small>by</small> %s <small>\n"
+                "from</small> %s [%d]",
+                current.artist, current.album, current.tracknr);
 
         switch(current.status)
         {
             case XMMS_PLAYBACK_STATUS_PLAY:
-                title = g_strdup_printf("%s Currently playing", NOTE);
+                title = g_strdup_printf("%s %s", NOTE, current.title);
                 break;
             case XMMS_PLAYBACK_STATUS_STOP:
-                title = g_strdup_printf("%s Playback stopped", NOTE);
+                title = g_strdup_printf("%s %s", STOP, current.title);
                 break;
             case XMMS_PLAYBACK_STATUS_PAUSE:
-                title = g_strdup_printf("%s Playback paused", NOTE);
+                title = g_strdup_printf("%s %s", PAUSE, current.title);
                 break;
             default:
                 title = g_strdup(NOTE);
